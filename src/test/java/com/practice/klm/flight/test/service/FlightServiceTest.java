@@ -3,6 +3,7 @@ package com.practice.klm.flight.test.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -65,4 +66,42 @@ public class FlightServiceTest {
         assertNotNull(result.get());
         assertEquals("FL123", result.get().getFlightNumber());
     }
+    
+    @Test
+    void testGetFlightsByOriginDestination() {
+        List<Flight> flights = Arrays.asList(
+                new Flight("FL123", new Airport("JFK"), new Airport("LAX"), Duration.ofHours(6)),
+                new Flight("FL456", new Airport("JFK"), new Airport("LAX"), Duration.ofHours(5))
+        );
+        when(flightRepository.findByOriginCodeAndDestinationCode("JFK", "LAX")).thenReturn(flights);
+
+        List<Flight> result = flightService.getFlightsByOriginDestination("JFK", "LAX");
+        assertEquals(2, result.size());
+        assertEquals("FL456", result.get(0).getFlightNumber());
+        assertEquals("FL123", result.get(1).getFlightNumber());
+    }
+
+    @Test
+    void testUpdateFlight() {
+        Flight flight = new Flight("FL123", new Airport("JFK"), new Airport("LAX"), Duration.ofHours(5));
+        when(flightRepository.existsById("FL123")).thenReturn(true);
+
+        boolean result = flightService.updateFlight("FL123", flight);
+        assertTrue(result);
+        verify(flightRepository, times(1)).save(flight);
+    }
+
+    @Test
+    void testDeleteFlight() {
+        when(flightRepository.existsById("FL123")).thenReturn(true);
+
+        boolean result = flightService.deleteFlight("FL123");
+        assertTrue(result);
+        verify(flightRepository, times(1)).deleteById("FL123");
+    }
+    
+    
+    
+    
+    
 }
