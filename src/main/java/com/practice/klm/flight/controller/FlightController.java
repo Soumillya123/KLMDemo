@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +56,7 @@ public class FlightController {
 	@PostMapping
 	    public ResponseEntity<Flight> createFlight(@Valid @RequestBody Flight flight) {
 	        Flight savedFlight = flightService.saveFlight(flight);
-	        return ResponseEntity.ok(savedFlight);
+	        return new ResponseEntity<>(savedFlight,HttpStatus.CREATED);
 	    }
 	
 	
