@@ -102,7 +102,7 @@ public class FlightControllerTest {
 	        updatedFlight.setDestination(destination);
 	        updatedFlight.setDuration(Duration.ofHours(3));
 
-	        mockMvc.perform(put("/flights/{flightNumber}", "AI101")
+	        mockMvc.perform(put("/flights/{flightNumber}", "FL125")
 	                .contentType(MediaType.APPLICATION_JSON)
 	                .content(objectMapper.writeValueAsString(updatedFlight)))
 	                .andExpect(status().isNoContent());
